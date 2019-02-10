@@ -1,0 +1,100 @@
+html{height: 100%;
+	background: linear-gradient(rgba(201, 175, 130, 1), rgb(76,175,80)) no-repeat center center fixed;
+	background-size: cover;}
+
+	
+#wrapper {width: 90%;
+		  margin: auto;
+		  min-width: 680px;
+		  /*max-width: 1080px*/}
+		  
+header{background: url("Pictures/Test/CrimeaBar5.jpg") no-repeat;
+	  background-position: 0% 88%;
+	  background-size: 100%;
+	  padding-bottom: 25px;
+	  padding-top: 10px;}
+		  
+#content {
+		 overflow: auto;
+		 height: 100%;}
+		 
+img {width:25%;
+	min-width: 240px;
+	display: block;
+	margin:auto;
+	padding-left: 240px;}
+			 
+#info {background: white;
+	  margin: auto;
+	  padding:5px;}
+	
+ul{list-style-type: none;
+	 margin:0;
+	 padding: 5px;
+	 text-align: center}
+
+nav li{display: inline-block;}
+
+nav a{padding: 10px;
+	 background-color: #50C66C;
+	 border: 1px solid black;
+	 text-decoration:none;
+	 color:white;
+	 text-shadow: 1px 1px 1px black;}
+
+nav a:hover{background-color:#ff471a}
+
+h1 {color: #ff471a;
+   text-shadow: 1px 2px 1px black;
+   /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+   text-align:center;
+   font-family: "Lucida Bright";}
+
+h2 {text-align: center;}
+
+h3{text-align: center;}
+
+#box{background-color:rgba(201, 175, 130,1);
+	  width: 32%;
+	  margin: auto;
+	  display: inline-block;
+	  overflow: auto;
+	  padding-left: 8px;
+	  border: 1px solid black}
+
+#box li{background:rgb(76,175,80);
+	  width: 50%;
+	  margin:auto;
+	  padding: 5px 0px;
+	  border: 1px solid black;}
+	  
+#box li:hover{background-color:#ff471a}
+
+#box a{text-decoration:none;
+	  color:white;
+	  text-shadow: 1px 1px 1px black;}
+
+aside{float:right;
+	  width:250px;
+	  background-color:rgba(201, 175, 130,1);
+	  text-align:center;
+	  border: 1px solid black;}
+	  
+/*
+
+OLD CSS
+
+nav {background-color: #a4c2c2;
+	padding: 15px;
+	border-bottom: 2px solid white;
+	border-top: 3px solid white}*/
+
+	/*h1 {color: white;
+   text-shadow: 1px 2px 1px black;
+   /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+   text-align:center;
+   font-family: "Lucida Bright";
+   background: rgba(201, 175, 130, 0.8);
+   width: 30%;
+   margin: auto;
+   box-shadow: 0px 2px 4px #804000;}*/

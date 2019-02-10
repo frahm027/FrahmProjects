@@ -1,0 +1,26 @@
+#wrapper {width: 90%;
+		  margin: auto;
+		  min-width: 680px;
+		  /*max-width: 1080px*/}
+		  
+#center {padding-left: 35px}
+#content {
+		 background-color: white;
+		 padding-top: 1px;
+		 }
+#content img {float: left;
+			 }
+body {margin: 0px 0px;
+	  padding: 0px;
+	  
+	  background-color: #669966}
+
+nav {background-color: #a4c2c2;
+	padding: 15px;
+	border-bottom: 2px solid white;
+	border-top: 3px solid white}	  
+h1 {color: white;
+	text-shadow: 1px 2px 1px black}
+h2 {}
+
+header{}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Frahm Projects</title>
+<Meta charset="utf-8">
+<link rel="stylesheet" href="ProjectDisplay.css"/>
+</head>
+<body>
+<div id="wrapper">
+<header>
+<h1>Frahm Project Portfolio</h1>
+<nav>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="school.html">Projects</a></li>
+  <li><a href="about.html">About Me</a></li>
+  <li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</header>
+<div id="content">
+<div>
+<h2>Nitrate Probability in the Minnesota River Watershed</h2>
+<img width="30%" src="Pictures/NitrateLoad.jpg"/>
+<img width="30%" src="Pictures/Permeability.jpg"/>
+<img width="30%" src="Pictures/Watertable.jpg"/>
+<p>This project was the final for my GIS II class and my goal was to make a tool through model builder to 
+replicate <a href="http://www.health.state.mn.us/divs/eh/water/swp/nitrate/nitratemaps.html">MN county projects</a> 
+that estimate how much nitrates, through things like fertilizers, are polluting surface/ground water. I chose to 
+use the Minnesota River Watershed as an example for my tool. The 3 maps above are some of the inputs I had to gather
+to rank what soil is most susceptible to pollutants to penetrate it. A higher rank on the map means that nitrate pollution 
+is more likely to happen and the final product of this project combines all of the of rankings from the inputs. For most of 
+the inputs I was able to easily get the data and rank according to what MN counties had done, but I was unable to get data on 
+the water table. This data was crucial for determining the susceptibility of the soil, so I got the depth of all documented wells 
+in MN from the county well index and used the Geostatisical Analyst tool to estimate the depth to the water table.</p>
+<img class="center" src="Pictures/NitrateTool.png"/>
+<p>The picture above is a step by step process through model builder to do this for any area that you can find the data for.
+As long as you have the inputs, the tool will do all the work and give you the two maps below. The Hydrogeologic Sensitvity 
+map shows which are in the most danger if pollution happens. The Nitrate Probability map is the final result, it combines the 
+hydrogeolgic sensitivity ranking data with the nitrate load from the map on the top of the page. The nitrate load ranking takes 
+into account what the land is being used for such as industrial or agriculture and what crops if any are being grown. The areas
+in the Minnesota River watershed that are in the most danger of polluting the water are those that are highly susceptible and
+have heavy nitrate usage such as growing corn.</p>
+</div>
+<img class="left" width="40%" src="Pictures/HydroSensitivity.jpg"/>
+<img class="right" width="40%" src="Pictures/Nitrate Ranking.jpg"/>
+
+</div>
+</div>
+</body>
+</html>

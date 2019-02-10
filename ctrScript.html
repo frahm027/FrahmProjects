@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Frahm Projects</title>
+<Meta charset="utf-8">
+<link rel="stylesheet" href="ProjectDisplay.css"/>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+</head>
+<body onload="prettyPrint()">
+<div id="wrapper">
+<header>
+<h1>Frahm Project Portfolio</h1>
+<nav>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="school.html">Projects</a></li>
+  <li><a href="about.html">About Me</a></li>
+  <li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</header>
+<div id="content">
+<h2> Forest Service Overlap Contour Fix</h2>
+<p></p>
+<pre class="prettyprint linenums">
+"""
+Script Name: Overlap_ContourFix
+Version: ArcGIS 10.2.2
+Author: Brett Frahm
+Date: 8/27/2014
+
+This script is intended to fix overlap inconsistencies in MnDNR LIDAR elevation data to generate cleaner and more accurate contours.
+Tips: Make sure folder containing data(Data_workspace) is only GDBs with Quarter Quarter Quad tiles.
+      Need to make a folder for the mosaic tool's output.
+"""
+import arcpy
+from arcpy import env
+import arcpy.sa
+import arcpy.da
+import arcpy.management as dm
+import arcpy.cartography as ca
+import os
+import datetime
+arcpy.CheckOutExtension("spatial")
+#Data_workspace = env.workspace = r'F:\elevation'
+#Data_workspace = env.workspace = r'F:\Bfrahm\SnappingTest'
+Data_workspace = env.workspace = r'E:\Forest Service\Bfrahm\PythTest2'
+#tileIndex = r'F:\elevation\indx_q006kpy4.gdb\indx_q006kpy4'
+tileIndex = r'E:\Forest Service\Bfrahm\Python Testing\indx_q006kpy4.gdb\indx_q006kpy4'
+env.overwriteOutput = True
+arcpy.MakeFeatureLayer_management(tileIndex, "tmp_tileIdx")
+GDBs = arcpy.ListFiles()
+#Looks at each GDB in folder then grabs the tile name of the GDB and selects surrounding tiles
+#for gdb in GDBs:
+#for gdb in [r'F:\Bfrahm\SnappingTest\1958-30-14.gdb']:
+for gdb in [r'E:\Forest Service\Bfrahm\PythTest2\1942-01-50.gdb']:
+    descGDB = arcpy.Describe(gdb)
+    GDB_name = descGDB.baseName
+    print "Tile:", GDB_name
+    GDB_workspace = env.workspace = os.path.join(Data_workspace, GDB_name + '.gdb')
+    selectTile = dm.SelectLayerByAttribute("tmp_tileIdx", "NEW_SELECTION", "DNR_QQQ_ID = \'" + GDB_name + "\'")
+    arcpy.SelectLayerByLocation_management(selectTile, "Boundary_Touches", "", "", "NEW_SELECTION")
+    cursor = arcpy.da.SearchCursor("tmp_tileIdx", ["DNR_QQQ_ID"])
+    listDEMs = list()
+    for row in cursor:
+        selDEM = os.path.join(Data_workspace, row[0] + '.gdb', "DEM01")
+        if arcpy.Exists(selDEM):
+            listDEMs.append(selDEM)
+    #Mosaics all selected tiles to average overlap between DEMs
+    print "Mosaic Surrounding Tiles"
+    mosaic = arcpy.MosaicToNewRaster_management(input_rasters=listDEMs,
+                                        #output_location=r'F:\Bfrahm\Mosaic Testing',
+                                        output_location=r'E:\Forest Service\Bfrahm\Mosaic Testing',
+                                        raster_dataset_name_with_extension="Mosaic01",
+                                        coordinate_system_for_the_raster="#", pixel_type="32_BIT_FLOAT",
+                                        cellsize="#", number_of_bands="1", mosaic_method="MEAN",
+                                        mosaic_colormap_mode="FIRST")
+    TrimDEM = arcpy.sa.ExtractByMask(mosaic, "DEM01")
+    TrimDEM.save("DEM01_AVG")
+    #Generates contours off mosaic then smooths the lines to create cleaner contours with reduced vertices
+    print "Generating Contours: {}".format(datetime.datetime.now())
+    arcpy.sa.Contour(mosaic, "tmpCtr", "2", "0", "3.280839895")
+    dm.SelectLayerByAttribute("tmp_tileIdx", "NEW_SELECTION", "DNR_QQQ_ID = \'" + GDB_name + "\'")
+    arcpy.Clip_analysis("tmpCtr", "tmp_tileIdx", "tmpCtr_Clip")
+    print 'Simplify 1: {}'.format(datetime.datetime.now())
+    ca.SimplifyLine("tmpCtr_Clip", "tmpCtr_sim", "POINT_REMOVE", ".000001 DecimalDegrees", "RESOLVE_ERRORS", "", "CHECK")
+    print 'Smooth: {}'.format(datetime.datetime.now())
+    ca.SmoothLine("tmpCtr_sim", "tmpCtr_smooth", "PAEK", ".0001 DecimalDegrees", "FIXED_CLOSED_ENDPOINT", "NO_CHECK")
+    print 'Simplify 2: {}'.format(datetime.datetime.now())
+    ca.SimplifyLine("tmpCtr_smooth", "Contours_AVG", "POINT_REMOVE", ".000001 DecimalDegrees", "RESOLVE_ERRORS", "", "CHECK")
+    arcpy.Delete_management("tmpCtr")
+    arcpy.Delete_management("tmpCtr_sim")
+    arcpy.Delete_management("tmpCtr_smooth")
+    arcpy.Delete_management("tmpCtr_Clip")
+    #Adds elevation, QQ tile name and interval fields to contours
+    print "Adding Fields"
+    arcpy.AddField_management("Contours_AVG", "Elevation", "Double")
+    arcpy.CalculateField_management("Contours_AVG", "Elevation", "!Contour!", "PYTHON_9.3")
+    arcpy.DeleteField_management("Contours_AVG", "ID;Contour")
+    arcpy.AddField_management("Contours_AVG", "dnr_qqq_id", "TEXT", "", "", 10)
+    arcpy.CalculateField_management("Contours_AVG", "dnr_qqq_id", '"' + GDB_name + '"', "PYTHON_9.3")
+    arcpy.AddField_management("Contours_AVG", "Interval", "SHORT")
+    Cursor = arcpy.UpdateCursor("Contours_AVG")
+    for row in Cursor:
+        if row.getValue("Elevation") % 50 == 0:
+            row.setValue("Interval", 50)
+            Cursor.updateRow(row)
+        elif row.getValue("Elevation") % 10 == 0:
+            row.setValue("Interval", 10)
+            Cursor.updateRow(row)
+        else:
+            row.setValue("Interval", 2)
+            Cursor.updateRow(row)
+    env.workspace = Data_workspace
+</pre>
+</div>
+</div>
+
+</body>
+</html>

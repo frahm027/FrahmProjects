@@ -1,0 +1,52 @@
+html{background: url("Pictures/Test/RiverTopRight.jpg") no-repeat center center fixed;
+	background-size: cover;}
+
+#wrapper {width: 90%;
+		  margin: auto;
+		  min-width: 680px;
+		  /*max-width: 1080px*/}
+		  
+#center {padding-left: 35px}
+#content {padding-top: 1px;
+		 }
+#content img {width: 250px;
+			height: 350px;
+			float: left;
+			padding-top: 16px;
+			 }
+			 
+#Info {background: rgb(128, 128, 128) transparent;
+	  background: rgba(128, 128, 128, 0.8);
+	  max-width: 915px;
+	  }
+	
+/*body {margin: 0px 0px;
+	 padding: 0px;
+}*/
+
+#button ul{list-style-type: none;
+		  margin:0;
+		  padding: 5px;
+		  }
+
+#button li{display: inline-block}
+
+#button p{display: inline-block;
+		 padding: 8px;
+		 background-color: #888844;
+		 border: 1px solid black}
+
+#button p:hover{background-color:red}
+nav {background-color: #888844;
+	padding: 15px;
+	border-bottom: 2px solid white;
+	border-top: 3px solid white;
+	font-size: 25px
+	}  
+h1 {color: #ff471a;
+   text-shadow: 1px 2px 1px black;
+   /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/}
+	
+h2 {text-align: center;}
+
+
